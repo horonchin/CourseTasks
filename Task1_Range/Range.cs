@@ -1,7 +1,5 @@
 ﻿class Range
 {
-	private const double Epsilon = 1.0e-10;
-
 	public double From { get; set; }
 
 	public double To { get; set; }
@@ -19,6 +17,6 @@
 
 	public bool IsInside(double number)
 	{
-		return number >= From - Epsilon && number <= To + Epsilon;
+		return number > From && number < To;
 	}
 }
