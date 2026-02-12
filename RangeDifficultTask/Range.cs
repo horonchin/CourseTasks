@@ -17,7 +17,7 @@
 
 	public bool IsInside(double number)
 	{
-		return number > From && number < To;
+		return number >= From && number <= To;
 	}
 
 	public Range GetIntersection(Range range)
