@@ -13,9 +13,9 @@
 		Console.WriteLine($"Длина отрезка равна {range.GetLength():F2}");
 
 		Console.Write("Введите число: ");
-		double inputNumber = Convert.ToDouble(Console.ReadLine());
+		double number = Convert.ToDouble(Console.ReadLine());
 
-		if (range.IsInside(inputNumber))
+		if (range.IsInside(number))
 		{
 			Console.WriteLine($"Данное число пренадлежит диапазону от {range.From} до {range.To}");
 		}

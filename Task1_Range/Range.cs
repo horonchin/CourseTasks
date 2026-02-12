@@ -17,6 +17,6 @@
 
 	public bool IsInside(double number)
 	{
-		return number > From && number < To;
+		return number >= From && number <= To;
 	}
 }
