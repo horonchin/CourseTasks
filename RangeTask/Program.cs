@@ -1,4 +1,6 @@
-﻿class Program
+﻿using RangeTask;
+using Range = RangeTask.Range;
+class Program
 {
 	public static void Main()
 	{
