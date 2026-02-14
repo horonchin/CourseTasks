@@ -1,5 +1,5 @@
-﻿using RangeTask;
-using Range = RangeTask.Range;
+﻿namespace Academits.Courses;
+
 class Program
 {
 	public static void Main()
@@ -10,7 +10,7 @@ class Program
 		Console.Write("Введите конец числового диапазона: ");
 		double rangeTo = Convert.ToDouble(Console.ReadLine());
 
-		Range range = new Range(rangeFrom, rangeTo);
+		RangeTask.Range range = new RangeTask.Range(rangeFrom, rangeTo);
 
 		Console.WriteLine($"Длина отрезка равна {range.GetLength():F2}");
 

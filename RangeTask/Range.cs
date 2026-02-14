@@ -1,25 +1,24 @@
-﻿namespace RangeTask
+﻿namespace RangeTask;
+
+class Range
 {
-	class Range
+	public double From { get; set; }
+
+	public double To { get; set; }
+
+	public Range(double from, double to)
 	{
-		public double From { get; set; }
+		From = from;
+		To = to;
+	}
 
-		public double To { get; set; }
+	public double GetLength()
+	{
+		return To - From;
+	}
 
-		public Range(double from, double to)
-		{
-			From = from;
-			To = to;
-		}
-
-		public double GetLength()
-		{
-			return To - From;
-		}
-
-		public bool IsInside(double number)
-		{
-			return number >= From && number <= To;
-		}
+	public bool IsInside(double number)
+	{
+		return number >= From && number <= To;
 	}
 }
