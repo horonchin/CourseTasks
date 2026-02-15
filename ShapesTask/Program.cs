@@ -26,7 +26,12 @@ class Program
 		Array.Sort(shapes, new AreaComparer());
 		IShape maxAreaShape = shapes[shapes.Length - 1];
 
+		IShape secondMaxAreaShape = shapes[shapes.Length - 2];
+
 		Console.WriteLine($"Фигура с самой большой площадью равной {maxAreaShape.GetArea()} является:");
 		Console.WriteLine(maxAreaShape);
+
+		Console.WriteLine($"Фигура со второй по значению площадью равной {secondMaxAreaShape.GetArea()} является:");
+		Console.WriteLine(secondMaxAreaShape);
 	}
 }
