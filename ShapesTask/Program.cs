@@ -1,37 +1,45 @@
-﻿using ShapesTask;
+﻿using ShapesTask.Shapes;
+using ShapesTask.Comparators;
 
-namespace Academits.Courses;
+namespace ShapesTask;
 
 class Program
 {
 	public static void Main()
 	{
-		IShape[] shapes = new IShape[]
-		{
+		IShape[] shapes =
+		[
 			new Square(10),
 			new Triangle(0, 0, 4, 0, 2, 3),
 			new Rectangle(3, 6),
 			new Circle(2.5),
 			new Square(3),
-			new Rectangle(2, 8),
+			new Rectangle(2, 100),
 			new Triangle(1, 1, 5, 1, 3, 4),
 			new Circle(1.8)
-		};
+		];
 
 		PrintMaxAreaShape(shapes);
+		PrintSecondMaxPerimeterShape(shapes);
 	}
 
 	public static void PrintMaxAreaShape(IShape[] shapes)
 	{
-		Array.Sort(shapes, new AreaComparer());
-		IShape maxAreaShape = shapes[shapes.Length - 1];
+		Array.Sort(shapes, new ShapeAreaComparer());
 
-		IShape secondMaxAreaShape = shapes[shapes.Length - 2];
+		IShape maxAreaShape = shapes[^1];
 
-		Console.WriteLine($"Фигура с самой большой площадью равной {maxAreaShape.GetArea()} является:");
+		Console.WriteLine($"Фигура с самой большой площадью является:");
 		Console.WriteLine(maxAreaShape);
+	}
 
-		Console.WriteLine($"Фигура со второй по значению площадью равной {secondMaxAreaShape.GetArea()} является:");
-		Console.WriteLine(secondMaxAreaShape);
+	public static void PrintSecondMaxPerimeterShape(IShape[] shapes)
+	{
+		Array.Sort(shapes, new ShapePerimeterComparer());
+
+		IShape secondMaxPerimeterShape = shapes[^2];
+
+		Console.WriteLine($"Фигура со вторым по величине периметром является:");
+		Console.WriteLine(secondMaxPerimeterShape);
 	}
 }
