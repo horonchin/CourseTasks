@@ -4,26 +4,44 @@ class Program
 {
 	public static void Main()
 	{
-		Console.Write("Введите начало числового диапазона: ");
-		double rangeFrom = Convert.ToDouble(Console.ReadLine());
+		Range rangeA = new Range(12, 13);
+		Range rangeB = new Range(13, 15);
 
-		Console.Write("Введите конец числового диапазона: ");
-		double rangeTo = Convert.ToDouble(Console.ReadLine());
+		Range intersection = rangeA.GetIntersection(rangeB);
 
-		Range range = new Range(rangeFrom, rangeTo);
-
-		Console.WriteLine($"Длина отрезка равна {range.GetLength():F2}");
-
-		Console.Write("Введите число: ");
-		double number = Convert.ToDouble(Console.ReadLine());
-
-		if (range.IsInside(number))
+		if (intersection != null)
 		{
-			Console.WriteLine($"Данное число пренадлежит диапазону от {range.From} до {range.To}");
+			Console.WriteLine($"Пересечение интервалов A и B равно ({intersection.From}, {intersection.To}).");
 		}
 		else
 		{
-			Console.WriteLine($"Данное число не пренадлежит диапазону от {range.From} до {range.To}");
+			Console.WriteLine("Интервалы А и B не пересекаются.");
+		}
+
+		Range[] union = rangeA.GetUnion(rangeB);
+
+		if (union.Length == 1)
+		{
+			Console.WriteLine($"Объединение интервалов A и B равно ({union[0].From}, {union[0].To}).");
+		}
+		else
+		{
+			Console.WriteLine($"Объединение интервалов A и B равно ({union[0].From}, {union[0].To}) и ({union[1].From}, {union[1].To}).");
+		}
+
+		Range[] difference = rangeA.GetDifference(rangeB);
+
+		if (difference.Length == 0)
+		{
+			Console.WriteLine("Разность интервалов A и B равна пустому множеству.");
+		}
+		else if (difference.Length == 1)
+		{
+			Console.WriteLine($"Разность интервалов A и B равна ({difference[0].From}, {difference[0].To}).");
+		}
+		else
+		{
+			Console.WriteLine($"Разность интервалов A и B равна ({difference[0].From}, {difference[0].To}) и ({difference[1].From}, {difference[1].To}].");
 		}
 	}
 }
