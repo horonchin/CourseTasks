@@ -1,8 +1,10 @@
-﻿namespace VectorTask;
+﻿using System.Numerics;
+
+namespace VectorTask;
 
 class Vector
 {
-	public const int prime = 17; 	
+	public const int prime = 17;
 
 	private double[] _components;
 
@@ -88,43 +90,45 @@ class Vector
 		}
 	}
 
-	public Vector Sum(Vector vector)
+	public static Vector Sum(Vector vector1, Vector vector2)
 	{
-		ArgumentNullException.ThrowIfNull(vector);
+		ArgumentNullException.ThrowIfNull(vector1);
+		ArgumentNullException.ThrowIfNull(vector2);
 
-		int thisSize = this.GetSize();
-		int vectorSize = vector.GetSize();
-		int maxSize = Math.Max(thisSize, vectorSize);
+		int vector1Size = vector1.GetSize();
+		int vector2Size = vector2.GetSize();
+		int maxSize = Math.Max(vector1Size, vector2Size);
 
 		double[] resultComponents = new double[maxSize];
 
 		for (int i = 0; i < maxSize; i++)
 		{
-			double thisValue = i < thisSize ? this._components[i] : 0;
-			double vectorValue = i < vectorSize ? vector._components[i] : 0;
+			double vector1Value = i < vector1Size ? vector1._components[i] : 0;
+			double vector2Value = i < vector2Size ? vector2._components[i] : 0;
 
-			resultComponents[i] = thisValue + vectorValue;
+			resultComponents[i] = vector1Value + vector2Value;
 		}
 
 		return new Vector(resultComponents);
 	}
 
-	public Vector Subtract(Vector vector)
+	public static Vector Subtract(Vector vector1, Vector vector2)
 	{
-		ArgumentNullException.ThrowIfNull(vector);
+		ArgumentNullException.ThrowIfNull(vector1);
+		ArgumentNullException.ThrowIfNull(vector2);
 
-		int thisSize = this.GetSize();
-		int vectorSize = vector.GetSize();
-		int maxSize = Math.Max(thisSize, vectorSize);
+		int vector1Size = vector1.GetSize();
+		int vector2Size = vector2.GetSize();
+		int maxSize = Math.Max(vector1Size, vector2Size);
 
 		double[] resultComponents = new double[maxSize];
 
 		for (int i = 0; i < maxSize; i++)
 		{
-			double thisValue = i < thisSize ? this._components[i] : 0;
-			double vectorValue = i < vectorSize ? vector._components[i] : 0;
+			double vector1Value = i < vector1Size ? vector1._components[i] : 0;
+			double vector2Value = i < vector2Size ? vector2._components[i] : 0;
 
-			resultComponents[i] = thisValue - vectorValue;
+			resultComponents[i] = vector1Value - vector2Value;
 		}
 
 		return new Vector(resultComponents);
@@ -174,16 +178,18 @@ class Vector
 		}
 	}
 
-	public double Dot(Vector vector)
+	public static double Dot(Vector vector1, Vector vector2)
 	{
-		ArgumentNullException.ThrowIfNull(vector);
+		ArgumentNullException.ThrowIfNull(vector1);
+		ArgumentNullException.ThrowIfNull(vector2);
+
 
 		double result = 0;
-		int minSize = Math.Min(this.GetSize(), vector.GetSize());
+		int minSize = Math.Min(vector1.GetSize(), vector2.GetSize());
 
 		for (int i = 0; i < minSize; i++)
 		{
-			result += this._components[i] * vector._components[i];
+			result += vector1._components[i] * vector2._components[i];
 		}
 
 		return result;
