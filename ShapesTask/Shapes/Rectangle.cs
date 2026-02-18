@@ -27,11 +27,10 @@ class Rectangle : IShape
 
 	public override int GetHashCode()
 	{
-		int prime = 37;
 		int hash = 1;
 
-		hash = prime * hash + Width.GetHashCode();
-		hash = prime * hash + Height.GetHashCode();
+		hash = IShape.prime * hash + Width.GetHashCode();
+		hash = IShape.prime * hash + Height.GetHashCode();
 
 		return hash;
 	}
