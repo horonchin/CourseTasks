@@ -22,7 +22,7 @@ class Range
 		return number >= From && number <= To;
 	}
 
-	public Range GetIntersection(Range range)
+	public Range? GetIntersection(Range range)
 	{
 		double intersectionFrom = Math.Max(this.From, range.From);
 		double intersectionTo = Math.Min(this.To, range.To);
@@ -37,9 +37,7 @@ class Range
 
 	public Range[] GetUnion(Range range)
 	{
-		bool canMerge = Math.Max(this.From, range.From) <= Math.Min(this.To, range.To);
-
-		if (canMerge)
+		if (this.From <= range.To && range.From <= this.To)
 		{
 			double unionFrom = Math.Min(this.From, range.From);
 			double unionTo = Math.Max(this.To, range.To);
@@ -52,13 +50,13 @@ class Range
 
 			if (this.From < range.From)
 			{
-				result[0] = new Range(this.From, this.To);
+				result[0] = new Range(From, To);
 				result[1] = new Range(range.From, range.To);
 			}
 			else
 			{
 				result[0] = new Range(range.From, range.To);
-				result[1] = new Range(this.From, this.To);
+				result[1] = new Range(From, To);
 			}
 
 			return result;
@@ -67,31 +65,28 @@ class Range
 
 	public Range[] GetDifference(Range range)
 	{
-		double intersectFrom = Math.Max(this.From, range.From);
-		double intersectTo = Math.Min(this.To, range.To);
+		double intersectionFrom = Math.Max(this.From, range.From);
+		double intersectionTo = Math.Min(this.To, range.To);
 
-		if (intersectFrom >= intersectTo)
+		if (intersectionFrom >= intersectionTo)
 		{
 			return new[] { new Range(this.From, this.To) };
 		}
 
-		bool hasLeft = this.From < intersectFrom;
-		bool hasRight = this.To > intersectTo;
+		bool hasLeftPart = this.From < intersectionFrom;
+		bool hasRightPart = this.To > intersectionTo;
 
-		if (hasLeft && hasRight)
+		if (hasLeftPart && hasRightPart)
 		{
-			Range leftPart = new Range(this.From, range.From);
-			Range rightPart = new Range(range.To, this.To);
-
-			return new Range[] { leftPart, rightPart };
+			return new Range[] { new Range(this.From, range.From), new Range(range.To, this.To) };
 		}
-		else if (hasLeft)
+		else if (hasLeftPart)
 		{
-			return new[] { new Range(this.From, intersectFrom) };
+			return new[] { new Range(this.From, intersectionFrom) };
 		}
-		else if (hasRight)
+		else if (hasRightPart)
 		{
-			return new[] { new Range(intersectTo, this.To) };
+			return new[] { new Range(intersectionTo, this.To) };
 		}
 		else
 		{
