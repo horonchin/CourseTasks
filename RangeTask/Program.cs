@@ -7,7 +7,7 @@ class Program
 		Range rangeA = new Range(12, 13);
 		Range rangeB = new Range(13, 15);
 
-		Range intersection = rangeA.GetIntersection(rangeB);
+		Range? intersection = rangeA.GetIntersection(rangeB);
 
 		if (intersection != null)
 		{

@@ -24,8 +24,8 @@ class Range
 
 	public Range? GetIntersection(Range range)
 	{
-		double intersectionFrom = Math.Max(this.From, range.From);
-		double intersectionTo = Math.Min(this.To, range.To);
+		double intersectionFrom = Math.Max(From, range.From);
+		double intersectionTo = Math.Min(To, range.To);
 
 		if (intersectionFrom < intersectionTo)
 		{
@@ -37,10 +37,10 @@ class Range
 
 	public Range[] GetUnion(Range range)
 	{
-		if (this.From <= range.To && range.From <= this.To)
+		if (From <= range.To && range.From <= To)
 		{
-			double unionFrom = Math.Min(this.From, range.From);
-			double unionTo = Math.Max(this.To, range.To);
+			double unionFrom = Math.Min(From, range.From);
+			double unionTo = Math.Max(To, range.To);
 
 			return new Range[] { new Range(unionFrom, unionTo) };
 		}
@@ -48,7 +48,7 @@ class Range
 		{
 			Range[] result = new Range[2];
 
-			if (this.From < range.From)
+			if (From < range.From)
 			{
 				result[0] = new Range(From, To);
 				result[1] = new Range(range.From, range.To);
@@ -65,32 +65,30 @@ class Range
 
 	public Range[] GetDifference(Range range)
 	{
-		double intersectionFrom = Math.Max(this.From, range.From);
-		double intersectionTo = Math.Min(this.To, range.To);
+		double intersectionFrom = Math.Max(From, range.From);
+		double intersectionTo = Math.Min(To, range.To);
 
 		if (intersectionFrom >= intersectionTo)
 		{
-			return new[] { new Range(this.From, this.To) };
+			return new[] { new Range(From, To) };
 		}
 
-		bool hasLeftPart = this.From < intersectionFrom;
-		bool hasRightPart = this.To > intersectionTo;
+		bool hasLeftPart = From < intersectionFrom;
+		bool hasRightPart = To > intersectionTo;
 
 		if (hasLeftPart && hasRightPart)
 		{
-			return new Range[] { new Range(this.From, range.From), new Range(range.To, this.To) };
+			return new Range[] { new Range(From, range.From), new Range(range.To, To) };
 		}
 		else if (hasLeftPart)
 		{
-			return new[] { new Range(this.From, intersectionFrom) };
+			return new[] { new Range(From, intersectionFrom) };
 		}
 		else if (hasRightPart)
 		{
-			return new[] { new Range(intersectionTo, this.To) };
+			return new[] { new Range(intersectionTo, To) };
 		}
-		else
-		{
-			return Array.Empty<Range>();
-		}
+
+		return Array.Empty<Range>();
 	}
 }
