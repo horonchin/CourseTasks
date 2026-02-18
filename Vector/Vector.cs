@@ -2,6 +2,8 @@
 
 class Vector
 {
+	public const int prime = 17; 	
+
 	private double[] _components;
 
 	public Vector(int n)
@@ -212,7 +214,6 @@ class Vector
 	public override int GetHashCode()
 	{
 		int hash = 1;
-		int prime = 17;
 
 		for (int i = 0; i < _components.Length; i++)
 		{
@@ -229,7 +230,7 @@ class Vector
 			return true;
 		}
 
-		if (ReferenceEquals(obj, null) || GetType() != obj.GetType())
+		if (obj is null || GetType() != obj.GetType())
 		{
 			return false;
 		}

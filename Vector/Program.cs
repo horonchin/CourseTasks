@@ -1,14 +1,9 @@
-﻿using System.Diagnostics.Tracing;
-using System.Formats.Tar;
-using VectorTask;
-
-namespace Academits.Courses;
+﻿using VectorTask;
 
 class Program
 {
 	public static void Main()
 	{
-		//проверка конструкторов
 		Vector v1 = new Vector(5);
 		Console.WriteLine(v1);
 
@@ -28,6 +23,8 @@ class Program
 
 		Vector v4 = new Vector(5, arr1);
 		Console.WriteLine(v4);
+
+		Console.WriteLine($"Длина вектора {v1} равна: {v1.GetSize()}");
 
 		v1.AddTo(v2);
 		Console.WriteLine($"Сложение v1 и v2 равно: {v1}");
@@ -50,5 +47,11 @@ class Program
 		Vector v7 = v4.Subtract(v6);
 		Console.WriteLine($"Вычитание вектора {v4} и {v6} равно: {v7}");
 
+		v7[0] = 5;
+		double firstV7Component = v7[0];
+		Console.WriteLine($"Первый элемент вектора v7 был изменён и стал равен: {v7[0]}");
+
+		double dot = v7.Dot(v4);
+		Console.WriteLine($"Скалярное произведение вектора v7 на v4 равно: {dot}");
 	}
 }
