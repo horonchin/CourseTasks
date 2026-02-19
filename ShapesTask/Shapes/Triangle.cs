@@ -86,13 +86,13 @@ class Triangle : IShape
 			return false;
 		}
 
-		Triangle p = (Triangle)obj;
+		Triangle triangle = (Triangle)obj;
 
-		return X1 == p.X1
-			&& X2 == p.X2
-			&& X3 == p.X3
-			&& Y1 == p.Y1
-			&& Y2 == p.Y2
-			&& Y3 == p.Y3;
+		return X1 == triangle.X1
+			&& X2 == triangle.X2
+			&& X3 == triangle.X3
+			&& Y1 == triangle.Y1
+			&& Y2 == triangle.Y2
+			&& Y3 == triangle.Y3;
 	}
 }
