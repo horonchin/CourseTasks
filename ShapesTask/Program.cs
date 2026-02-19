@@ -19,25 +19,21 @@ class Program
 			new Circle(1.8)
 		];
 
-		Console.WriteLine("Фигура с самой большой площадью: \n" + PrintMaxAreaShape(shapes));
-		Console.WriteLine("Фигура со вторым по величине периметром: \n" + PrintSecondMaxPerimeterShape(shapes));
+		Console.WriteLine("Фигура с самой большой площадью:" + Environment.NewLine + GetMaxAreaShape(shapes));
+		Console.WriteLine("Фигура со вторым по величине периметром:" + Environment.NewLine + GetSecondMaxPerimeterShape(shapes));
 	}
 
-	public static IShape PrintMaxAreaShape(IShape[] shapes)
+	public static IShape GetMaxAreaShape(IShape[] shapes)
 	{
 		Array.Sort(shapes, new ShapeAreaComparer());
 
-		IShape maxAreaShape = shapes[^1];
-
-		return maxAreaShape;
+		return shapes[^1];
 	}
 
-	public static IShape PrintSecondMaxPerimeterShape(IShape[] shapes)
+	public static IShape GetSecondMaxPerimeterShape(IShape[] shapes)
 	{
 		Array.Sort(shapes, new ShapePerimeterComparer());
 
-		IShape secondMaxPerimeterShape = shapes[^2];
-
-		return secondMaxPerimeterShape;
+		return shapes[^2];
 	}
 }

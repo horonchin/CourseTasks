@@ -61,15 +61,16 @@ class Triangle : IShape
 
 	public override int GetHashCode()
 	{
+		const int Prime = 17;
+
 		int hash = 1;
 
-		hash = IShape.prime * hash + X1.GetHashCode();
-		hash = IShape.prime * hash + X2.GetHashCode();
-		hash = IShape.prime * hash + X3.GetHashCode();
-		hash = IShape.prime * hash + Y1.GetHashCode();
-		hash = IShape.prime * hash + Y2.GetHashCode();
-		hash = IShape.prime * hash + Y3.GetHashCode();
-
+		hash = Prime * hash + X1.GetHashCode();
+		hash = Prime * hash + X2.GetHashCode();
+		hash = Prime * hash + X3.GetHashCode();
+		hash = Prime * hash + Y1.GetHashCode();
+		hash = Prime * hash + Y2.GetHashCode();
+		hash = Prime * hash + Y3.GetHashCode();
 		return hash;
 	}
 
