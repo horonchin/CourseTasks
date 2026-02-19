@@ -44,23 +44,22 @@ class Range
 
 			return new Range[] { new Range(unionFrom, unionTo) };
 		}
+
+		Range[] result = new Range[2];
+
+		if (From < range.From)
+		{
+			result[0] = new Range(From, To);
+			result[1] = new Range(range.From, range.To);
+		}
 		else
 		{
-			Range[] result = new Range[2];
-
-			if (From < range.From)
-			{
-				result[0] = new Range(From, To);
-				result[1] = new Range(range.From, range.To);
-			}
-			else
-			{
-				result[0] = new Range(range.From, range.To);
-				result[1] = new Range(From, To);
-			}
-
-			return result;
+			result[0] = new Range(range.From, range.To);
+			result[1] = new Range(From, To);
 		}
+
+		return result;
+
 	}
 
 	public Range[] GetDifference(Range range)
