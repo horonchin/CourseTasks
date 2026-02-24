@@ -79,11 +79,13 @@ class Range
 		{
 			return new Range[] { new Range(From, range.From), new Range(range.To, To) };
 		}
-		else if (hasLeftPart)
+
+		if (hasLeftPart)
 		{
 			return new[] { new Range(From, intersectionFrom) };
 		}
-		else if (hasRightPart)
+
+		if (hasRightPart)
 		{
 			return new[] { new Range(intersectionTo, To) };
 		}
