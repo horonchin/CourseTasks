@@ -20,7 +20,7 @@ class Program
 		double[] arr1 = { 1.1, 2.2, 3.3, 4.4 };
 		Vector v3 = new Vector(arr1);
 		Console.WriteLine(v3);
-
+		
 		Vector v4 = new Vector(5, arr1);
 		Console.WriteLine(v4);
 

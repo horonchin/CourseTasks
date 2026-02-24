@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace ShapesTask.Shapes;
+﻿namespace ShapesTask.Shapes;
 
 class Rectangle : IShape
 {
@@ -29,12 +27,12 @@ class Rectangle : IShape
 
 	public override int GetHashCode()
 	{
-		const int Prime = 17;
+		const int prime = 17;
 
 		int hash = 1;
 
-		hash = Prime * hash + Width.GetHashCode();
-		hash = Prime * hash + Height.GetHashCode();
+		hash = prime * hash + Width.GetHashCode();
+		hash = prime * hash + Height.GetHashCode();
 
 		return hash;
 	}
@@ -51,8 +49,8 @@ class Rectangle : IShape
 			return false;
 		}
 
-		Rectangle rectangle = (Rectangle)obj;
+		Rectangle otherRectangle = (Rectangle)obj;
 
-		return Width == rectangle.Width && Height == rectangle.Height;
+		return Width == otherRectangle.Width && Height == otherRectangle.Height;
 	}
 }

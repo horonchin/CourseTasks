@@ -61,16 +61,16 @@ class Triangle : IShape
 
 	public override int GetHashCode()
 	{
-		const int Prime = 17;
+		const int prime = 17;
 
 		int hash = 1;
 
-		hash = Prime * hash + X1.GetHashCode();
-		hash = Prime * hash + X2.GetHashCode();
-		hash = Prime * hash + X3.GetHashCode();
-		hash = Prime * hash + Y1.GetHashCode();
-		hash = Prime * hash + Y2.GetHashCode();
-		hash = Prime * hash + Y3.GetHashCode();
+		hash = prime * hash + X1.GetHashCode();
+		hash = prime * hash + X2.GetHashCode();
+		hash = prime * hash + X3.GetHashCode();
+		hash = prime * hash + Y1.GetHashCode();
+		hash = prime * hash + Y2.GetHashCode();
+		hash = prime * hash + Y3.GetHashCode();
 		return hash;
 	}
 
@@ -86,13 +86,13 @@ class Triangle : IShape
 			return false;
 		}
 
-		Triangle triangle = (Triangle)obj;
+		Triangle otherTriangle = (Triangle)obj;
 
-		return X1 == triangle.X1
-			&& X2 == triangle.X2
-			&& X3 == triangle.X3
-			&& Y1 == triangle.Y1
-			&& Y2 == triangle.Y2
-			&& Y3 == triangle.Y3;
+		return X1 == otherTriangle.X1
+			&& X2 == otherTriangle.X2
+			&& X3 == otherTriangle.X3
+			&& Y1 == otherTriangle.Y1
+			&& Y2 == otherTriangle.Y2
+			&& Y3 == otherTriangle.Y3;
 	}
 }
