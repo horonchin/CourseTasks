@@ -4,46 +4,51 @@ class Vector
 {
 	private double[] _components;
 
-	public int Length => _components.Length;
+	public int Size => _components.Length;
 
-	public Vector(int vectorLength)
+	public Vector(int vectorSize)
 	{
-		if (vectorLength <= 0)
+		if (vectorSize <= 0)
 		{
-			throw new ArgumentException($"Длина вектора должна быть положительной: {vectorLength}", nameof(vectorLength));
+			throw new ArgumentException($"Длина вектора должна быть положительной: {vectorSize}", nameof(vectorSize));
 		}
 
-		_components = new double[vectorLength];
+		_components = new double[vectorSize];
 	}
 
 	public Vector(Vector vector)
 	{
 		ArgumentNullException.ThrowIfNull(vector);
 
-		_components = new double[vector.Length];
-		Array.Copy(vector._components, _components, vector.Length);
+		_components = new double[vector.Size];
+		Array.Copy(vector._components, _components, vector.Size);
 	}
 
 	public Vector(double[] components)
 	{
 		ArgumentNullException.ThrowIfNull(components);
 
+		if (components.Length == 0)
+		{
+			throw new ArgumentException("Вектор не может быть нулевой размерности", nameof(components));
+		}
+
 		_components = new double[components.Length];
 		Array.Copy(components, _components, components.Length);
 	}
 
-	public Vector(int vectorLength, double[] components)
+	public Vector(int vectorSize, double[] components)
 	{
 		ArgumentNullException.ThrowIfNull(components);
 
-		if (vectorLength <= 0)
+		if (vectorSize <= 0)
 		{
-			throw new ArgumentException($"Длина вектора должна быть положительной: {vectorLength}", nameof(vectorLength));
+			throw new ArgumentException($"Длина вектора должна быть положительной: {vectorSize}", nameof(vectorSize));
 		}
 
-		_components = new double[vectorLength];
+		_components = new double[vectorSize];
 
-		int copyLength = Math.Min(vectorLength, components.Length);
+		int copyLength = Math.Min(vectorSize, components.Length);
 		Array.Copy(components, 0, _components, 0, copyLength);
 	}
 
@@ -52,13 +57,13 @@ class Vector
 		return $"{{{string.Join(", ", _components)}}}";
 	}
 
-	public double GetSize()
+	public double GetLength()
 	{
 		double sum = 0;
 
-		for (int i = 0; i < Length; i++)
+		foreach (double e in _components)
 		{
-			sum += _components[i] * _components[i];
+			sum += e * e;
 		}
 
 		return Math.Sqrt(sum);
@@ -68,14 +73,29 @@ class Vector
 	{
 		ArgumentNullException.ThrowIfNull(vector);
 
-		if (vector.Length > Length)
+		if (vector.Size > Size)
 		{
-			Array.Resize(ref _components, vector.Length);
+			Array.Resize(ref _components, vector.Size);
 		}
 
-		for (int i = 0; i < vector.Length; i++)
+		for (int i = 0; i < vector.Size; i++)
 		{
 			_components[i] += vector._components[i];
+		}
+	}
+
+	public void Subtract(Vector vector)
+	{
+		ArgumentNullException.ThrowIfNull(vector);
+
+		if (vector.Size > Size)
+		{
+			Array.Resize(ref _components, vector.Size);
+		}
+
+		for (int i = 0; i < vector.Size; i++)
+		{
+			_components[i] -= vector._components[i];
 		}
 	}
 
@@ -91,7 +111,7 @@ class Vector
 		return result;
 	}
 
-	public static Vector GetSubtract(Vector vector1, Vector vector2)
+	public static Vector GetDifference(Vector vector1, Vector vector2)
 	{
 		ArgumentNullException.ThrowIfNull(vector1);
 		ArgumentNullException.ThrowIfNull(vector2);
@@ -103,44 +123,29 @@ class Vector
 		return result;
 	}
 
-	public void Subtract(Vector vector)
+	public void Multiply(double scalar)
 	{
-		ArgumentNullException.ThrowIfNull(vector);
-
-		if (vector.Length > Length)
+		for (int i = 0; i < Size; i++)
 		{
-			Array.Resize(ref _components, vector.Length);
-		}
-
-		for (int i = 0; i < vector.Length; i++)
-		{
-			_components[i] -= vector._components[i];
-		}
-	}
-
-	public void Multiply(double n)
-	{
-		for (int i = 0; i < Length; i++)
-		{
-			_components[i] *= n;
+			_components[i] *= scalar;
 		}
 	}
 
 	public void Negate()
 	{
-		for (int i = 0; i < Length; i++)
+		for (int i = 0; i < Size; i++)
 		{
 			_components[i] = -_components[i];
 		}
 	}
 
-	public static double GetDot(Vector vector1, Vector vector2)
+	public static double GetDotProduct(Vector vector1, Vector vector2)
 	{
 		ArgumentNullException.ThrowIfNull(vector1);
 		ArgumentNullException.ThrowIfNull(vector2);
 
 		double result = 0;
-		int minSize = Math.Min(vector1.Length, vector2.Length);
+		int minSize = Math.Min(vector1.Size, vector2.Size);
 
 		for (int i = 0; i < minSize; i++)
 		{
@@ -201,12 +206,12 @@ class Vector
 
 		Vector otherVector = (Vector)obj;
 
-		if (otherVector.Length != Length)
+		if (otherVector.Size != Size)
 		{
 			return false;
 		}
 
-		for (int i = 0; i < Length; i++)
+		for (int i = 0; i < Size; i++)
 		{
 			if (_components[i] != otherVector._components[i])
 			{
