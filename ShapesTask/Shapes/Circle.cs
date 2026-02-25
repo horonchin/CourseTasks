@@ -19,7 +19,7 @@ class Circle : IShape
 
 	public override string ToString()
 	{
-		return $"Круг со радиусом {Radius}, диаметром {GetHeight()}, площадью {GetArea()} и длиной окружности равной {GetPerimeter()}";
+		return $"Круг с радиусом {Radius}, диаметром {GetHeight()}, площадью {GetArea()} и длиной окружности равной {GetPerimeter()}";
 	}
 
 	public override int GetHashCode()

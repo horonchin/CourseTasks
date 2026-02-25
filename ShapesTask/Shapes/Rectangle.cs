@@ -49,8 +49,8 @@ class Rectangle : IShape
 			return false;
 		}
 
-		Rectangle otherRectangle = (Rectangle)obj;
+		Rectangle rectangle = (Rectangle)obj;
 
-		return Width == otherRectangle.Width && Height == otherRectangle.Height;
+		return Width == rectangle.Width && Height == rectangle.Height;
 	}
 }

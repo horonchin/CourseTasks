@@ -1,4 +1,4 @@
-﻿namespace ShapesTask.Comparators;
+﻿namespace ShapesTask.Comparers;
 
 public class ShapeAreaComparer : IComparer<IShape>
 {

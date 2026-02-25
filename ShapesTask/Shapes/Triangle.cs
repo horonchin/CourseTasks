@@ -71,6 +71,7 @@ class Triangle : IShape
 		hash = prime * hash + Y1.GetHashCode();
 		hash = prime * hash + Y2.GetHashCode();
 		hash = prime * hash + Y3.GetHashCode();
+
 		return hash;
 	}
 
@@ -86,13 +87,13 @@ class Triangle : IShape
 			return false;
 		}
 
-		Triangle otherTriangle = (Triangle)obj;
+		Triangle triangle = (Triangle)obj;
 
-		return X1 == otherTriangle.X1
-			&& X2 == otherTriangle.X2
-			&& X3 == otherTriangle.X3
-			&& Y1 == otherTriangle.Y1
-			&& Y2 == otherTriangle.Y2
-			&& Y3 == otherTriangle.Y3;
+		return X1 == triangle.X1
+			&& X2 == triangle.X2
+			&& X3 == triangle.X3
+			&& Y1 == triangle.Y1
+			&& Y2 == triangle.Y2
+			&& Y3 == triangle.Y3;
 	}
 }
