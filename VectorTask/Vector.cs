@@ -6,14 +6,14 @@ class Vector
 
 	public int Size => _components.Length;
 
-	public Vector(int vectorSize)
+	public Vector(int size)
 	{
-		if (vectorSize <= 0)
+		if (size <= 0)
 		{
-			throw new ArgumentException($"Длина вектора должна быть положительной: {vectorSize}", nameof(vectorSize));
+			throw new ArgumentException($"Размерность вектора должна быть положительной: {size}", nameof(size));
 		}
 
-		_components = new double[vectorSize];
+		_components = new double[size];
 	}
 
 	public Vector(Vector vector)
@@ -37,18 +37,18 @@ class Vector
 		Array.Copy(components, _components, components.Length);
 	}
 
-	public Vector(int vectorSize, double[] components)
+	public Vector(int size, double[] components)
 	{
 		ArgumentNullException.ThrowIfNull(components);
 
-		if (vectorSize <= 0)
+		if (size <= 0)
 		{
-			throw new ArgumentException($"Длина вектора должна быть положительной: {vectorSize}", nameof(vectorSize));
+			throw new ArgumentException($"Размерность вектора должна быть положительной: {size}", nameof(size));
 		}
 
-		_components = new double[vectorSize];
+		_components = new double[size];
 
-		int copyLength = Math.Min(vectorSize, components.Length);
+		int copyLength = Math.Min(size, components.Length);
 		Array.Copy(components, 0, _components, 0, copyLength);
 	}
 
@@ -204,16 +204,16 @@ class Vector
 			return false;
 		}
 
-		Vector otherVector = (Vector)obj;
+		Vector vector = (Vector)obj;
 
-		if (otherVector.Size != Size)
+		if (vector.Size != Size)
 		{
 			return false;
 		}
 
 		for (int i = 0; i < Size; i++)
 		{
-			if (_components[i] != otherVector._components[i])
+			if (_components[i] != vector._components[i])
 			{
 				return false;
 			}
