@@ -1,6 +1,6 @@
 ﻿namespace VectorTask;
 
-class Vector
+public class Vector
 {
 	private double[] _components;
 
