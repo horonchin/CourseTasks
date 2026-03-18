@@ -21,7 +21,7 @@ class Matrix
 
 		_vectors = new Vector[rows];
 
-		for (int i = 0; i < columns; i++)
+		for (int i = 0; i < rows; i++)
 		{
 			_vectors[i] = new Vector(columns);
 		}
@@ -40,7 +40,7 @@ class Matrix
 
 		for (int i = 0; i < matrix.Rows; i++)
 		{
-			_vectors[i] = matrix._vectors[i];
+			_vectors[i] = new Vector(matrix._vectors[i]);
 		}
 	}
 
@@ -75,11 +75,35 @@ class Matrix
 			throw new ArgumentException("Массив векторов не может быть пустым", nameof(vectors));
 		}
 
+		int maxVectorSize = vectors[0].Size;
+
+		for (int i = 1; i < vectors.Length; i++)
+		{
+			if (vectors[i].Size > maxVectorSize)
+			{
+				maxVectorSize = vectors[i].Size;
+			}
+		}
+
 		_vectors = new Vector[vectors.Length];
 
 		for (int i = 0; i < vectors.Length; i++)
 		{
-			_vectors[i] = new Vector(vectors[i]);
+			if (vectors[i].Size == maxVectorSize)
+			{
+				_vectors[i] = new Vector(vectors[i]);
+			}
+			else
+			{
+				double[] expanded = new double[maxVectorSize];
+
+				for (int j = 0; j < vectors[i].Size; j++)
+				{
+					expanded[j] = vectors[i][j];
+				}
+
+				_vectors[i] = new Vector(expanded);
+			}
 		}
 	}
 
@@ -87,17 +111,17 @@ class Matrix
 	{
 		get
 		{
-			if (rowIndex <= 0 || rowIndex >= Rows)
+			if (rowIndex < 0 || rowIndex >= Rows)
 			{
 				throw new IndexOutOfRangeException($"Индекс строки {rowIndex} вне границ (0-{Rows - 1})");
 			}
 
-			return new Vector(_vectors[rowIndex]);
+			return _vectors[rowIndex];
 		}
 
 		set
 		{
-			if (rowIndex <= 0 || rowIndex >= Rows)
+			if (rowIndex < 0 || rowIndex >= Rows)
 			{
 				throw new IndexOutOfRangeException($"Индекс строки {rowIndex} вне границ (0-{Rows - 1})");
 			}
@@ -135,7 +159,7 @@ class Matrix
 		int rows = Rows;
 		int columns = Columns;
 
-		double[,] transposed = new double[rows, columns];
+		double[,] transposed = new double[columns, rows];
 
 		for (int i = 0; i < rows; i++)
 		{
@@ -267,7 +291,7 @@ class Matrix
 		}
 	}
 
-	public void Substract(Matrix matrix)
+	public void Subtract(Matrix matrix)
 	{
 		if (Rows != matrix.Rows || Columns != matrix.Columns)
 		{
@@ -298,7 +322,7 @@ class Matrix
 	{
 		Matrix result = new Matrix(matrix1);
 
-		result.Substract(matrix2);
+		result.Subtract(matrix2);
 
 		return result;
 	}
