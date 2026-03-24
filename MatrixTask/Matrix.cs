@@ -2,28 +2,31 @@
 
 namespace MatrixTask;
 
-
 class Matrix
 {
-	private readonly Vector[] _vectors;
+	private readonly Vector[] _rows;
 
-	public int Rows => _vectors.Length;
+	public int RowsCount => _rows.Length;
 
-	public int Columns => _vectors[0].Size;
-
+	public int ColumnsCount => _rows[0].Size;
 
 	public Matrix(int rows, int columns)
 	{
-		if (rows <= 0 || columns <= 0)
+		if (columns <= 0)
 		{
-			throw new ArgumentException("Размеры матрицы должны быть положительны.");
+			throw new ArgumentException($"Количество столбцов матрицы должно быть положительным. Столбцы: {columns}");
 		}
 
-		_vectors = new Vector[rows];
+		if (rows <= 0)
+		{
+			throw new ArgumentException($"Количество строк матрицы должно быть положительным. Строки: {rows}");
+		}
+
+		_rows = new Vector[rows];
 
 		for (int i = 0; i < rows; i++)
 		{
-			_vectors[i] = new Vector(columns);
+			_rows[i] = new Vector(columns);
 		}
 	}
 
@@ -31,16 +34,11 @@ class Matrix
 	{
 		ArgumentNullException.ThrowIfNull(matrix);
 
-		if (matrix._vectors == null)
-		{
-			throw new InvalidOperationException("Исходная матрица повреждена.");
-		}
+		_rows = new Vector[matrix.RowsCount];
 
-		_vectors = new Vector[matrix.Rows];
-
-		for (int i = 0; i < matrix.Rows; i++)
+		for (int i = 0; i < matrix.RowsCount; i++)
 		{
-			_vectors[i] = new Vector(matrix._vectors[i]);
+			_rows[i] = new Vector(matrix._rows[i]);
 		}
 	}
 
@@ -51,18 +49,23 @@ class Matrix
 		int rows = array.GetLength(0);
 		int columns = array.GetLength(1);
 
-		_vectors = new Vector[rows];
+		if (rows == 0 || columns == 0)
+		{
+			throw new ArgumentException("Матрица не может быть нулевого размера", nameof(array));
+		}
+
+		_rows = new Vector[rows];
 
 		for (int i = 0; i < rows; i++)
 		{
-			double[] row = new double[columns];
+			Vector row = new Vector(columns);
 
 			for (int j = 0; j < columns; j++)
 			{
 				row[j] = array[i, j];
 			}
 
-			_vectors[i] = new Vector(row);
+			_rows[i] = row;
 		}
 	}
 
@@ -85,24 +88,24 @@ class Matrix
 			}
 		}
 
-		_vectors = new Vector[vectors.Length];
+		_rows = new Vector[vectors.Length];
 
 		for (int i = 0; i < vectors.Length; i++)
 		{
 			if (vectors[i].Size == maxVectorSize)
 			{
-				_vectors[i] = new Vector(vectors[i]);
+				_rows[i] = new Vector(vectors[i]);
 			}
 			else
 			{
-				double[] expanded = new double[maxVectorSize];
+				Vector expandedVector = new Vector(maxVectorSize);
 
 				for (int j = 0; j < vectors[i].Size; j++)
 				{
-					expanded[j] = vectors[i][j];
+					expandedVector[j] = vectors[i][j];
 				}
 
-				_vectors[i] = new Vector(expanded);
+				_rows[i] = expandedVector;
 			}
 		}
 	}
@@ -111,208 +114,240 @@ class Matrix
 	{
 		get
 		{
-			if (rowIndex < 0 || rowIndex >= Rows)
+			if (rowIndex < 0 || rowIndex >= RowsCount)
 			{
-				throw new IndexOutOfRangeException($"Индекс строки {rowIndex} вне границ (0-{Rows - 1})");
+				throw new IndexOutOfRangeException($"Индекс строки {rowIndex} вне границ (0-{RowsCount - 1})");
 			}
 
-			return _vectors[rowIndex];
+			return new Vector(_rows[rowIndex]);
 		}
 
 		set
 		{
-			if (rowIndex < 0 || rowIndex >= Rows)
+			if (rowIndex < 0 || rowIndex >= RowsCount)
 			{
-				throw new IndexOutOfRangeException($"Индекс строки {rowIndex} вне границ (0-{Rows - 1})");
+				throw new IndexOutOfRangeException($"Индекс строки {rowIndex} вне границ (0-{RowsCount - 1})");
 			}
 
 			ArgumentNullException.ThrowIfNull(value);
 
-			if (value.Size != Columns)
+			if (value.Size != ColumnsCount)
 			{
-				throw new ArgumentException($"Длина вектора ({value.Size}) не соответствует числу столбцов ({Columns})");
+				throw new ArgumentException($"Длина вектора ({value.Size}) не соответствует числу столбцов ({ColumnsCount})");
 			}
 
-			_vectors[rowIndex] = new Vector(value);
+			_rows[rowIndex] = new Vector(value);
+		}
+	}
+
+	public double this[int row, int column]
+	{
+		get
+		{
+			if (row < 0 || row >= RowsCount)
+			{
+				throw new IndexOutOfRangeException($"Индекс строки {row} вне границ");
+			}
+
+			if (column < 0 || column >= ColumnsCount)
+			{
+				throw new IndexOutOfRangeException($"Индекс столбца {column} вне границ");
+			}
+
+			return _rows[row][column];
+		}
+		set
+		{
+			if (row < 0 || row >= RowsCount)
+			{
+				throw new IndexOutOfRangeException($"Индекс строки {row} вне границ");
+			}
+
+			if (column < 0 || column >= ColumnsCount)
+			{
+				throw new IndexOutOfRangeException($"Индекс столбца {column} вне границ");
+			}
+
+			_rows[row][column] = value;
 		}
 	}
 
 	public Vector GetColumn(int columnIndex)
 	{
-		if (columnIndex < 0 || columnIndex >= Columns)
+		if (columnIndex < 0 || columnIndex >= ColumnsCount)
 		{
-			throw new IndexOutOfRangeException($"Индекс столбца {columnIndex} вне границ (0-{Columns - 1})");
+			throw new IndexOutOfRangeException($"Индекс столбца {columnIndex} вне границ (0-{ColumnsCount - 1})");
 		}
 
-		double[] columnData = new double[Rows];
+		Vector columnVector = new Vector(RowsCount);
 
-		for (int i = 0; i < Rows; i++)
+		for (int i = 0; i < RowsCount; i++)
 		{
-			columnData[i] = _vectors[i][columnIndex];
+			columnVector[i] = _rows[i][columnIndex];
 		}
 
-		return new Vector(columnData);
+		return columnVector;
 	}
 
-	public Matrix Transpose()
+	public void Transpose()
 	{
-		int rows = Rows;
-		int columns = Columns;
-
-		double[,] transposed = new double[columns, rows];
-
-		for (int i = 0; i < rows; i++)
+		if (RowsCount != ColumnsCount)
 		{
-			for (int j = 0; j < columns; j++)
+			throw new InvalidOperationException("In-place транспонирование возможно только для квадратных матриц");
+		}
+
+		for (int i = 0; i < RowsCount; i++)
+		{
+			for (int j = i + 1; j < ColumnsCount; j++)
 			{
-				transposed[j, i] = _vectors[i][j];
+				double temp = _rows[i][j];
+				_rows[i][j] = _rows[j][i];
+				_rows[j][i] = temp;
 			}
 		}
-
-		return new Matrix(transposed);
 	}
 
-	public double Determinant()
+	public double GetDeterminant()
 	{
-		if (Rows != Columns)
-			throw new InvalidOperationException("Определитель существует только для квадратных матриц");
+		if (RowsCount != ColumnsCount)
+		{
+			throw new InvalidOperationException("Определитель существует только для квадратных матриц. Количество строк не равно количеству столбцов.");
+		}
 
-		return CalculateDeterminant(_vectors);
+		return CalculateDeterminant(_rows);
 	}
 
-	private static double CalculateDeterminant(Vector[] matrix)
+	private static double CalculateDeterminant(Vector[] rows)
 	{
-		int n = matrix.Length;
+		int n = rows.Length;
 
 		if (n == 1)
-			return matrix[0][0];
+		{
+			return rows[0][0];
+		}
 
 		if (n == 2)
-			return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+		{
+			return rows[0][0] * rows[1][1] - rows[0][1] * rows[1][0];
+		}
 
-		double det = 0;
+		double determinant = 0;
 		int sign = 1;
 
-		for (int j = 0; j < n; j++)
-		{
-			Vector[] minor = new Vector[n - 1];
+		Vector[] submatrix = new Vector[n - 1];
 
-			for (int i = 1; i < n; i++)
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 1; j < n; j++)
 			{
-				double[] rowData = new double[n - 1];
-				int colIndex = 0;
+				Vector rowVector = new Vector(n - 1);
+				int columnIndex = 0;
 
 				for (int k = 0; k < n; k++)
 				{
-					if (k == j)
+					if (k == i)
 					{
 						continue;
 					}
 
-					rowData[colIndex++] = matrix[i][k];
+					rowVector[columnIndex] = rows[j][k];
+					columnIndex++;
 				}
 
-				minor[i - 1] = new Vector(rowData);
+				submatrix[j - 1] = rowVector;
 			}
 
-			det += sign * matrix[0][j] * CalculateDeterminant(minor);
+			determinant += sign * rows[0][i] * CalculateDeterminant(submatrix);
 			sign = -sign;
 		}
 
-		return det;
+		return determinant;
 	}
 
 	public override string ToString()
 	{
-		if (_vectors == null || _vectors.Length == 0)
+		if (_rows.Length == 0)
 		{
 			return "{}";
 		}
 
-		string[] rows = new string[_vectors.Length];
+		var result = new StringBuilder();
+		result.Append('{');
 
-		for (int i = 0; i < _vectors.Length; i++)
+		for (int i = 0; i < _rows.Length; i++)
 		{
-			rows[i] = _vectors[i].ToString();
+			if (i > 0)
+			{
+				result.Append(", ");
+			}
+
+			result.Append(_rows[i].ToString());
 		}
 
-		return $"{{{string.Join(", ", rows)}}}";
+		result.Append('}');
+
+		return result.ToString();
 	}
 
 	public void MultiplyByScalar(double scalar)
 	{
-		for (int i = 0; i < Rows; i++)
+		foreach (Vector row in _rows)
 		{
-			_vectors[i].Multiply(scalar);
+			row.Multiply(scalar);
 		}
 	}
 
-	public Vector GetMultiplyByVector(Vector vector)
+	public Vector Multiply(Vector vector)
 	{
-		if (vector.Size != Columns)
+		if (vector.Size != ColumnsCount)
 		{
-			throw new ArgumentException("Невозможно умножить матрицу на данный вектор.");
+			throw new ArgumentException($"Невозможно умножить матрицу на данный вектор. Размер вектора: {vector.Size}, требуется: {ColumnsCount}", nameof(vector));
 		}
-		else
+
+		Vector result = new Vector(RowsCount);
+
+		for (int i = 0; i < RowsCount; i++)
 		{
-			Vector result = new Vector(Rows);
-
-			for (int i = 0; i < Rows; i++)
-			{
-				double sum = 0;
-
-				for (int j = 0; j < Columns; j++)
-				{
-					sum += _vectors[i][j] * vector[j];
-				}
-
-				result[i] = sum;
-			}
-
-			return result;
+			result[i] = Vector.GetDotProduct(_rows[i], vector);
 		}
+
+		return result;
 	}
 
 	public void Add(Matrix matrix)
 	{
-		if (Rows != matrix.Rows || Columns != matrix.Columns)
+		if (RowsCount != matrix.RowsCount || ColumnsCount != matrix.ColumnsCount)
 		{
 			throw new ArgumentException("Невозможно сложить матрицы. Их размерности отличаются.");
 		}
-		else
+
+		for (int i = 0; i < RowsCount; i++)
 		{
-			for (int i = 0; i < Rows; i++)
-			{
-				for (int j = 0; j < Columns; j++)
-				{
-					_vectors[i][j] += matrix._vectors[i][j];
-				}
-			}
+			_rows[i].Add(matrix._rows[i]);
 		}
 	}
 
 	public void Subtract(Matrix matrix)
 	{
-		if (Rows != matrix.Rows || Columns != matrix.Columns)
+		if (RowsCount != matrix.RowsCount || ColumnsCount != matrix.ColumnsCount)
 		{
 			throw new ArgumentException("Невозможно вычесть матрицы. Их размерности отличаются.");
 		}
-		else
+
+		for (int i = 0; i < RowsCount; i++)
 		{
-			for (int i = 0; i < Rows; i++)
-			{
-				for (int j = 0; j < Columns; j++)
-				{
-					_vectors[i][j] -= matrix._vectors[i][j];
-				}
-			}
+			_rows[i].Subtract(matrix._rows[i]);
 		}
 	}
 
 	public static Matrix GetSum(Matrix matrix1, Matrix matrix2)
 	{
-		Matrix result = new Matrix(matrix1);
+		if (matrix1.RowsCount != matrix2.RowsCount || matrix1.ColumnsCount != matrix2.ColumnsCount)
+		{
+			throw new ArgumentException("Невозможно сложить матрицы. Их размерности отличаются.");
+		}
 
+		Matrix result = new Matrix(matrix1);
 		result.Add(matrix2);
 
 		return result;
@@ -320,35 +355,84 @@ class Matrix
 
 	public static Matrix GetDifference(Matrix matrix1, Matrix matrix2)
 	{
-		Matrix result = new Matrix(matrix1);
+		if (matrix1.RowsCount != matrix2.RowsCount || matrix1.ColumnsCount != matrix2.ColumnsCount)
+		{
+			throw new ArgumentException("Невозможно вычесть матрицы. Их размерности отличаются.");
+		}
 
+		Matrix result = new Matrix(matrix1);
 		result.Subtract(matrix2);
 
 		return result;
 	}
 
-	public static Matrix GetMultiplyByMatrix(Matrix matrix1, Matrix matrix2)
+	public static Matrix Multiply(Matrix matrix1, Matrix matrix2)
 	{
-		if (matrix1.Columns != matrix2.Rows)
-			throw new ArgumentException("Количество столбцов первой матрицы должно равняться количеству строк второй");
-
-		Matrix result = new Matrix(matrix1.Rows, matrix2.Columns);
-
-		for (int i = 0; i < matrix1.Rows; i++)
+		if (matrix1.ColumnsCount != matrix2.RowsCount)
 		{
-			for (int j = 0; j < matrix2.Columns; j++)
+			throw new ArgumentException("Количество столбцов первой матрицы должно равняться количеству строк второй");
+		}
+
+		Matrix result = new Matrix(matrix1.RowsCount, matrix2.ColumnsCount);
+
+		for (int i = 0; i < matrix1.RowsCount; i++)
+		{
+			for (int j = 0; j < matrix2.ColumnsCount; j++)
 			{
 				double sum = 0;
 
-				for (int k = 0; k < matrix1.Columns; k++)
+				for (int k = 0; k < matrix1.ColumnsCount; k++)
 				{
-					sum += matrix1._vectors[i][k] * matrix2._vectors[k][j];
+					sum += matrix1[i, k] * matrix2[k, j];
 				}
 
-				result[i][j] = sum;
+				result[i, j] = sum;
 			}
 		}
 
 		return result;
+	}
+
+	public override int GetHashCode()
+	{
+		const int prime = 37;
+		int hash = 1;
+
+		foreach (Vector row in _rows)
+		{
+			hash = hash * prime + row.GetHashCode();
+		}
+
+		return hash;
+	}
+
+	public override bool Equals(object? obj)
+	{
+		if (ReferenceEquals(obj, this))
+		{
+			return true;
+		}
+
+		if (obj is null || GetType() != obj.GetType())
+		{
+			return false;
+		}
+
+		Matrix other = (Matrix)obj;
+
+		if (RowsCount != other.RowsCount || ColumnsCount != other.ColumnsCount)
+		{
+			return false;
+		}
+
+		for (int i = 0; i < RowsCount; i++)
+		{
+			if (!_rows[i].Equals(other._rows[i]))
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

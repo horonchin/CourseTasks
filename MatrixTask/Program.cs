@@ -1,5 +1,6 @@
 ﻿using VectorTask;
-using MatrixTask;
+
+namespace MatrixTask;
 
 class Program
 {
@@ -31,7 +32,8 @@ class Program
 
 		Console.WriteLine($"Первый столбец матрицы matrix4 равен: {matrix4.GetColumn(0)}");
 
-		Console.WriteLine($"Транспонированная матрица от matrix4 равна: {matrix4.Transpose()}");
+		matrix4.Transpose();
+		Console.WriteLine($"Транспонированная матрица от matrix4 равна: {matrix4}");
 
 		double[] array3 = { 0, 1, 4 };
 		Vector vector5 = new Vector(array3);
@@ -40,9 +42,9 @@ class Program
 		double[] array4 = { 0, 0, 1 };
 		Vector vector6 = new Vector(array4);
 		matrix4[0] = vector6;
-		Console.WriteLine($"Определитель матрицы {matrix4} равен: {matrix4.Determinant()}");
+		Console.WriteLine($"Определитель матрицы {matrix4} равен: {matrix4.GetDeterminant()}");
 
-		Console.WriteLine($"Умножение матрицы {matrix4} на вектор {vector4} равно: {matrix4.GetMultiplyByVector(vector4)}");
+		Console.WriteLine($"Умножение матрицы {matrix4} на вектор {vector4} равно: {matrix4.Multiply(vector4)}");
 
 		Matrix matrix5 = new Matrix(matrix4);
 
@@ -59,6 +61,6 @@ class Program
 
 		Console.WriteLine($"Разность matrix4 и matrix5 равна: {Matrix.GetDifference(matrix4, matrix5)}");
 
-		Console.WriteLine($"Произведение matrix4 и matrix5 равно: {Matrix.GetMultiplyByMatrix(matrix4, matrix5)}");
+		Console.WriteLine($"Произведение matrix4 и matrix5 равно: {Matrix.Multiply(matrix4, matrix5)}");
 	}
 }
