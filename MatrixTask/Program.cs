@@ -44,7 +44,7 @@ class Program
 		matrix4[0] = vector6;
 		Console.WriteLine($"Определитель матрицы {matrix4} равен: {matrix4.GetDeterminant()}");
 
-		Console.WriteLine($"Умножение матрицы {matrix4} на вектор {vector4} равно: {matrix4.Multiply(vector4)}");
+		Console.WriteLine($"Умножение матрицы {matrix4} на вектор {vector4} равно: {matrix4.GetMultiply(vector4)}");
 
 		Matrix matrix5 = new Matrix(matrix4);
 
@@ -61,6 +61,6 @@ class Program
 
 		Console.WriteLine($"Разность matrix4 и matrix5 равна: {Matrix.GetDifference(matrix4, matrix5)}");
 
-		Console.WriteLine($"Произведение matrix4 и matrix5 равно: {Matrix.Multiply(matrix4, matrix5)}");
+		Console.WriteLine($"Произведение matrix4 и matrix5 равно: {Matrix.GetMultiply(matrix4, matrix5)}");
 	}
 }
