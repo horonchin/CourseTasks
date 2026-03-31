@@ -5,11 +5,11 @@ namespace MatrixTask;
 
 public class Matrix
 {
-	private Vector[] _rowsCount;
+	private Vector[] _rows;
 
-	public int RowsCount => _rowsCount.Length;
+	public int RowsCount => _rows.Length;
 
-	public int ColumnsCount => _rowsCount[0].Size;
+	public int ColumnsCount => _rows[0].Size;
 
 	public Matrix(int rowsCount, int columnsCount)
 	{
@@ -23,11 +23,11 @@ public class Matrix
 			throw new ArgumentException($"Количество строк матрицы должно быть положительным. Количество строк: {rowsCount}", nameof(rowsCount));
 		}
 
-		_rowsCount = new Vector[rowsCount];
+		_rows = new Vector[rowsCount];
 
 		for (int i = 0; i < rowsCount; i++)
 		{
-			_rowsCount[i] = new Vector(columnsCount);
+			_rows[i] = new Vector(columnsCount);
 		}
 	}
 
@@ -35,11 +35,11 @@ public class Matrix
 	{
 		ArgumentNullException.ThrowIfNull(matrix);
 
-		_rowsCount = new Vector[matrix.RowsCount];
+		_rows = new Vector[matrix.RowsCount];
 
 		for (int i = 0; i < matrix.RowsCount; i++)
 		{
-			_rowsCount[i] = new Vector(matrix._rowsCount[i]);
+			_rows[i] = new Vector(matrix._rows[i]);
 		}
 	}
 
@@ -55,7 +55,7 @@ public class Matrix
 			throw new ArgumentException("Матрица не может быть нулевого размера", nameof(array));
 		}
 
-		_rowsCount = new Vector[rowsCount];
+		_rows = new Vector[rowsCount];
 
 		for (int i = 0; i < rowsCount; i++)
 		{
@@ -66,7 +66,7 @@ public class Matrix
 				row[j] = array[i, j];
 			}
 
-			_rowsCount[i] = row;
+			_rows[i] = row;
 		}
 	}
 
@@ -89,13 +89,13 @@ public class Matrix
 			}
 		}
 
-		_rowsCount = new Vector[vectors.Length];
+		_rows = new Vector[vectors.Length];
 
 		for (int i = 0; i < vectors.Length; i++)
 		{
 			if (vectors[i].Size == maxVectorSize)
 			{
-				_rowsCount[i] = new Vector(vectors[i]);
+				_rows[i] = new Vector(vectors[i]);
 			}
 			else
 			{
@@ -106,7 +106,7 @@ public class Matrix
 					expandedVector[j] = vectors[i][j];
 				}
 
-				_rowsCount[i] = expandedVector;
+				_rows[i] = expandedVector;
 			}
 		}
 	}
@@ -120,7 +120,7 @@ public class Matrix
 				throw new IndexOutOfRangeException($"Индекс строки {rowIndex} вне границ (0-{RowsCount - 1})");
 			}
 
-			return new Vector(_rowsCount[rowIndex]);
+			return new Vector(_rows[rowIndex]);
 		}
 
 		set
@@ -134,10 +134,10 @@ public class Matrix
 
 			if (value.Size != ColumnsCount)
 			{
-				throw new ArgumentException($"Размерность вектора ({value.Size}) не соответствует числу столбцов ({ColumnsCount})");
+				throw new ArgumentException($"Размерность вектора ({value.Size}) не соответствует числу столбцов ({ColumnsCount})", nameof(value));
 			}
 
-			_rowsCount[rowIndex] = new Vector(value);
+			_rows[rowIndex] = new Vector(value);
 		}
 	}
 
@@ -155,7 +155,7 @@ public class Matrix
 				throw new IndexOutOfRangeException($"Индекс столбца {columnIndex} вне границ (0-{ColumnsCount - 1})");
 			}
 
-			return _rowsCount[rowIndex][columnIndex];
+			return _rows[rowIndex][columnIndex];
 		}
 		set
 		{
@@ -169,7 +169,7 @@ public class Matrix
 				throw new IndexOutOfRangeException($"Индекс столбца {columnIndex} вне границ (0-{ColumnsCount - 1})");
 			}
 
-			_rowsCount[rowIndex][columnIndex] = value;
+			_rows[rowIndex][columnIndex] = value;
 		}
 	}
 
@@ -184,7 +184,7 @@ public class Matrix
 
 		for (int i = 0; i < RowsCount; i++)
 		{
-			columnVector[i] = _rowsCount[i][columnIndex];
+			columnVector[i] = _rows[i][columnIndex];
 		}
 
 		return columnVector;
@@ -196,15 +196,10 @@ public class Matrix
 
 		for (int i = 0; i < ColumnsCount; i++)
 		{
-			transposedRows[i] = new Vector(RowsCount);
-
-			for (int j = 0; j < RowsCount; j++)
-			{
-				transposedRows[i][j] = _rowsCount[j][i];
-			}
+			transposedRows[i] = GetColumn(i);
 		}
 
-		_rowsCount = transposedRows;
+		_rows = transposedRows;
 	}
 
 	public double GetDeterminant()
@@ -214,7 +209,7 @@ public class Matrix
 			throw new InvalidOperationException($"Определитель существует только для квадратных матриц. Количество строк: {RowsCount}, количество столбцов: {ColumnsCount}");
 		}
 
-		return CalculateDeterminant(_rowsCount);
+		return CalculateDeterminant(_rows);
 	}
 
 	private static double CalculateDeterminant(Vector[] rows)
@@ -269,19 +264,12 @@ public class Matrix
 
 	public override string ToString()
 	{
-		if (_rowsCount.Length == 0)
-		{
-			return "{}";
-		}
-
 		StringBuilder result = new StringBuilder();
-		result.Append('{');
-		result.Append(_rowsCount[0]);
+		result.Append('{').Append(_rows[0]);
 
-		for (int i = 1; i < _rowsCount.Length; i++)
+		for (int i = 1; i < _rows.Length; i++)
 		{
-			result.Append(", ");
-			result.Append(_rowsCount[i]);
+			result.Append(", ").Append(_rows[i]);
 		}
 
 		result.Append('}');
@@ -291,7 +279,7 @@ public class Matrix
 
 	public void MultiplyByScalar(double scalar)
 	{
-		foreach (Vector row in _rowsCount)
+		foreach (Vector row in _rows)
 		{
 			row.Multiply(scalar);
 		}
@@ -308,7 +296,7 @@ public class Matrix
 
 		for (int i = 0; i < RowsCount; i++)
 		{
-			result[i] = Vector.GetDotProduct(_rowsCount[i], vector);
+			result[i] = Vector.GetDotProduct(_rows[i], vector);
 		}
 
 		return result;
@@ -328,7 +316,7 @@ public class Matrix
 
 		for (int i = 0; i < RowsCount; i++)
 		{
-			_rowsCount[i].Add(matrix._rowsCount[i]);
+			_rows[i].Add(matrix._rows[i]);
 		}
 	}
 
@@ -338,7 +326,7 @@ public class Matrix
 
 		for (int i = 0; i < RowsCount; i++)
 		{
-			_rowsCount[i].Subtract(matrix._rowsCount[i]);
+			_rows[i].Subtract(matrix._rows[i]);
 		}
 	}
 
@@ -394,7 +382,7 @@ public class Matrix
 		const int prime = 37;
 		int hash = 1;
 
-		foreach (Vector row in _rowsCount)
+		foreach (Vector row in _rows)
 		{
 			hash = hash * prime + row.GetHashCode();
 		}
@@ -423,7 +411,7 @@ public class Matrix
 
 		for (int i = 0; i < RowsCount; i++)
 		{
-			if (!_rowsCount[i].Equals(other._rowsCount[i]))
+			if (!_rows[i].Equals(other._rows[i]))
 			{
 				return false;
 			}
