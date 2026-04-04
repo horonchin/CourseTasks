@@ -264,17 +264,18 @@ public class Matrix
 
 	public override string ToString()
 	{
-		StringBuilder result = new StringBuilder();
-		result.Append('{').Append(_rows[0]);
+		StringBuilder stringBuilder = new StringBuilder();
+
+		stringBuilder.Append('{').Append(_rows[0]);
 
 		for (int i = 1; i < _rows.Length; i++)
 		{
-			result.Append(", ").Append(_rows[i]);
+			stringBuilder.Append(", ").Append(_rows[i]);
 		}
 
-		result.Append('}');
+		stringBuilder.Append('}');
 
-		return result.ToString();
+		return stringBuilder.ToString();
 	}
 
 	public void MultiplyByScalar(double scalar)
